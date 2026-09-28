@@ -4,22 +4,89 @@
     $gtm = $settings['gtm_container_id'] ?? '';
 @endphp
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-TT">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>{{ $title ?? $settings['business_name'].' | '.$settings['tagline'] }}</title>
-  <meta name="description" content="{{ $metaDescription ?? $settings['business_name'].', '.$settings['address'].'. Affordable eyewear, quality eye care and free eye examinations. Book your appointment on WhatsApp.' }}" />
+  @php
+    $seoTitle = $title ?? $settings['seo_title'];
+    $seoDescription = $metaDescription ?? $settings['seo_description'];
+    $canonical = $canonical ?? url()->current();
+    $ogImage = asset('assets/images/photo-07.jpg');
+    $phoneDigits = preg_replace('/\D+/', '', $settings['phone']);
+    $phoneE164 = '+'.(strlen($phoneDigits) === 7 ? '1868'.$phoneDigits : (strlen($phoneDigits) === 10 ? '1'.$phoneDigits : $phoneDigits));
+  @endphp
+  <title>{{ $seoTitle }}</title>
+  <meta name="description" content="{{ $seoDescription }}" />
+  <link rel="canonical" href="{{ $canonical }}" />
+  <meta name="robots" content="{{ $robots ?? 'index, follow, max-image-preview:large' }}" />
+  <meta name="geo.region" content="TT" />
+  <meta name="geo.placename" content="Cunupia, Trinidad and Tobago" />
+  {{-- Open Graph / social sharing --}}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{ $settings['business_name'] }}" />
+  <meta property="og:title" content="{{ $seoTitle }}" />
+  <meta property="og:description" content="{{ $seoDescription }}" />
+  <meta property="og:url" content="{{ $canonical }}" />
+  <meta property="og:image" content="{{ $ogImage }}" />
+  <meta property="og:locale" content="en_TT" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ $seoTitle }}" />
+  <meta name="twitter:description" content="{{ $seoDescription }}" />
+  <meta name="twitter:image" content="{{ $ogImage }}" />
+  {{-- Structured data: local business (Optician) for Google Maps and rich results --}}
+  <script type="application/ld+json" nonce="{{ $nonce }}">
+  {!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Optician',
+    '@id' => url('/').'#business',
+    'name' => $settings['business_name'],
+    'alternateName' => 'Star Optical',
+    'slogan' => $settings['tagline'],
+    'description' => $settings['seo_description'],
+    'url' => url('/'),
+    'logo' => asset('assets/images/logo.png'),
+    'image' => $ogImage,
+    'telephone' => $phoneE164,
+    'email' => $settings['email'],
+    'priceRange' => '$$',
+    'currenciesAccepted' => 'TTD',
+    'address' => [
+      '@type' => 'PostalAddress',
+      'streetAddress' => '#267 Southern Main Road',
+      'addressLocality' => 'Cunupia',
+      'addressRegion' => 'Chaguanas',
+      'addressCountry' => 'TT',
+    ],
+    'geo' => ['@type' => 'GeoCoordinates', 'latitude' => 10.5565, 'longitude' => -61.3862],
+    'areaServed' => ['Cunupia', 'Chaguanas', 'Caroni', 'Couva', 'Arima', 'Trinidad and Tobago'],
+    'hasMap' => 'https://www.google.com/maps/search/?api=1&query='.rawurlencode($settings['address']),
+    'openingHoursSpecification' => [
+      ['@type' => 'OpeningHoursSpecification', 'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '09:00', 'closes' => '17:00'],
+      ['@type' => 'OpeningHoursSpecification', 'dayOfWeek' => ['Saturday'], 'opens' => '09:00', 'closes' => '14:00'],
+    ],
+    'sameAs' => array_values(array_filter([$settings['facebook_url'], $settings['instagram_url'], $settings['tiktok_url']])),
+    'makesOffer' => [
+      ['@type' => 'Offer', 'itemOffered' => ['@type' => 'Service', 'name' => 'Free eye examination'], 'price' => '0', 'priceCurrency' => 'TTD'],
+      ['@type' => 'Offer', 'itemOffered' => ['@type' => 'Product', 'name' => 'Prescription eyeglasses']],
+      ['@type' => 'Offer', 'itemOffered' => ['@type' => 'Product', 'name' => 'Prescription and polarised sunglasses']],
+    ],
+    'contactPoint' => ['@type' => 'ContactPoint', 'contactType' => 'appointments', 'telephone' => '+'.\App\Models\Setting::whatsappNumber(), 'url' => \App\Models\Setting::whatsappLink(''), 'availableLanguage' => 'en'],
+  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+  </script>
+  {{ $structuredData ?? '' }}
   @if($settings['google_site_verification'] ?? false)
   <meta name="google-site-verification" content="{{ $settings['google_site_verification'] }}" />
   @endif
   <link rel="icon" href="{{ asset('assets/images/logo.png') }}" type="image/png" />
+  @if(request()->routeIs('home'))<link rel="preload" as="image" href="{{ asset('assets/images/photo-07.jpg') }}" fetchpriority="high" />@endif
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}" />
+  <link rel="stylesheet" href="{{ asset('assets/css/seo.css') }}?v={{ filemtime(public_path('assets/css/seo.css')) }}" />
 
   {{-- Google Tag Manager (container ID is set by the administrator under Settings) --}}
   @if($gtm)
@@ -94,7 +161,9 @@
       <div>
         <h4>Quick links</h4>
         <ul>
-          <li><a href="{{ route('home') }}#services">Products &amp; Services</a></li>
+          <li><a href="{{ route('page.eye-exams') }}">Free Eye Exams in Cunupia</a></li>
+          <li><a href="{{ route('page.eyeglasses') }}">Eyeglasses &amp; Frames in Trinidad</a></li>
+          <li><a href="{{ route('page.sunglasses') }}">Prescription &amp; Polarised Sunglasses</a></li>
           <li><a href="{{ route('home') }}#frames">Frames &amp; Sunglasses</a></li>
           <li><a href="{{ route('home') }}#eye-exams">Free Eye Exams</a></li>
           <li><a href="{{ route('home') }}#promotions">Promotions</a></li>
@@ -122,7 +191,7 @@
     </div>
     <div class="container footer__bottom">
       <span>© {{ date('Y') }} {{ $settings['business_name'] }} All rights reserved.</span>
-      <span>{{ $settings['tagline'] }}</span>
+      <span>Designed and Developed by <a href="https://linkedin.com/in/keronlewis" target="_blank" rel="noopener">Code Canvas Consultants Ltd.</a></span>
     </div>
   </footer>
 

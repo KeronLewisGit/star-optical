@@ -6,13 +6,13 @@
 <x-public-layout :settings="$settings">
   {{-- ===== Hero ===== --}}
   <section class="hero hero--photo">
-    <img class="hero__bg" src="{{ asset('assets/images/photo-07.jpg') }}" alt="" />
+    <img class="hero__bg" src="{{ asset('assets/images/photo-07.jpg') }}" alt="Woman wearing round gold prescription eyeglasses from Star Optical, optician in Cunupia, Trinidad" width="1400" height="933" fetchpriority="high" />
     <div class="hero__overlay"></div>
     <div class="container hero__grid">
       <div class="hero__content">
         <span class="eyebrow eyebrow--onDark">{{ $settings['tagline'] }}</span>
-        <h1>See better.<br />Feel better.</h1>
-        <p class="lead">Expert care for your eyes. Stylish frames, prescription &amp; polarised sunglasses, and <strong>free eye examinations</strong> in Cunupia.</p>
+        <h1>See better.<br />Feel better.<span class="hero__sub">Eyeglasses, sunglasses &amp; free eye exams in Cunupia, Trinidad</span></h1>
+        <p class="lead">Expert eye care from your neighbourhood optician. Stylish frames, prescription &amp; polarised sunglasses, and <strong>free eye examinations</strong> near Chaguanas.</p>
         <div class="btn-row">
           <a class="btn btn--wa" href="{{ $bookExam }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Book a free eye exam</a>
           <a class="btn btn--outline btn--outline-light" href="#frames">Browse frames</a>
@@ -32,8 +32,8 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Products &amp; services</span>
-        <h2>Everything for healthier, clearer vision</h2>
-        <p>From your eye exam to the perfect pair of frames, we handle it all under one roof.</p>
+        <h2>Optical services in Cunupia, Trinidad</h2>
+        <p>From your free eye exam to the perfect pair of prescription glasses or sunglasses, we handle it all under one roof.</p>
       </div>
       <div class="grid grid--3 services">
         @foreach([
@@ -59,8 +59,8 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Exceptional eye care</span>
-        <h2>Your eye exam is on us. <span class="txt-blue">Always.</span></h2>
-        <p>Experience friendly, personalised eye care designed to keep your vision clear and your eyes healthy for life.</p>
+        <h2>Free eye examinations in Cunupia. <span class="txt-blue">Always.</span></h2>
+        <p>Friendly, personalised eye tests for adults, seniors and children, designed to keep your vision clear and your eyes healthy for life. <a href="{{ route('page.eye-exams') }}">Learn more about our free eye exams</a>.</p>
       </div>
       <div class="bigcard">
         <div class="bigcard__text">
@@ -94,8 +94,8 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Our collection</span>
-        <h2>Frames &amp; Sunglasses</h2>
-        <p>A hand-picked selection for every face, style and budget. Visit us in Cunupia to try them on, or message us about any style you like.</p>
+        <h2>Eyeglass Frames &amp; Sunglasses in Trinidad</h2>
+        <p>A hand-picked selection of prescription glasses, designer frames and polarised sunglasses for every face, style and budget. Visit us in Cunupia to try them on, or message us about any style you like. See our <a href="{{ route('page.eyeglasses') }}">eyeglasses</a> and <a href="{{ route('page.sunglasses') }}">sunglasses</a> pages for details.</p>
       </div>
       <div class="filters" role="tablist" aria-label="Filter collection">
         <button class="filter is-active" data-filter="all">All</button>
@@ -237,6 +237,36 @@
       </div>
     </div>
   </section>
+
+  {{-- ===== FAQ (also emitted as FAQPage structured data for Google) ===== --}}
+  @php
+    $faqs = [
+      ['Do you offer free eye exams in Trinidad?', 'Yes. Star Optical provides free eye examinations at our store in Cunupia for adults, seniors and children, with no purchase required. Book on WhatsApp or walk in during opening hours.'],
+      ['Where is Star Optical located?', 'We are at #267 Southern Main Road, Cunupia, Trinidad and Tobago, a short drive from Chaguanas, Caroni, Couva and central Trinidad. Free parking is nearby.'],
+      ['How do I book an appointment?', 'Message us on WhatsApp at (868) 380-4144 with your name and preferred day, or use the booking form on this page and we will confirm your time.'],
+      ['Do you sell prescription sunglasses and polarised sunglasses?', 'Yes. We make sunglasses to your prescription and stock polarised UV400 sunglasses for driving and the beach, for men, women and kids.'],
+      ['How much do glasses cost at Star Optical?', 'We keep eyewear affordable with frames at a range of prices and regular promotions on complete glasses packages. Message us for this month\'s offers.'],
+      ['Do you have frames for children?', 'Yes. We stock flexible, durable kids frames and offer free eye tests for school-age children.'],
+    ];
+  @endphp
+  <section class="section section--soft" id="faq">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Common questions</span><h2>Eye care in Trinidad: your questions answered</h2></div>
+      <div class="faq">
+        @foreach($faqs as [$q, $a])
+          <details @if($loop->first) open @endif><summary>{{ $q }}</summary><p>{{ $a }}</p></details>
+        @endforeach
+      </div>
+      <div class="related mt-3">
+        <a href="{{ route('page.eye-exams') }}">Free eye exam in Cunupia<small>What's included and who should be tested.</small></a>
+        <a href="{{ route('page.eyeglasses') }}">Eyeglasses &amp; frames in Trinidad<small>Frames, lenses and complete packages.</small></a>
+        <a href="{{ route('page.sunglasses') }}">Prescription &amp; polarised sunglasses<small>UV400 protection made to your script.</small></a>
+      </div>
+    </div>
+  </section>
+  <x-slot name="structuredData">
+    <script type="application/ld+json" nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">{!! json_encode(['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => array_map(fn ($qa) => ['@type' => 'Question', 'name' => $qa[0], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $qa[1]]], $faqs)], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+  </x-slot>
 
   {{-- ===== CTA band ===== --}}
   <section class="cta-band">
