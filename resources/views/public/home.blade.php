@@ -6,7 +6,7 @@
 <x-public-layout :settings="$settings">
   {{-- ===== Hero ===== --}}
   <section class="hero hero--photo">
-    <img class="hero__bg" src="{{ asset('assets/images/photo-07.jpg') }}" alt="Woman wearing round gold prescription eyeglasses from Star Optical, optician in Cunupia, Trinidad" width="1400" height="933" fetchpriority="high" />
+    <img class="hero__bg" src="{{ asset('assets/images/photo-07.webp') }}" alt="Woman wearing round gold prescription eyeglasses from Star Optical, optician in Cunupia, Trinidad" width="1400" height="933" fetchpriority="high" />
     <div class="hero__overlay"></div>
     <div class="container hero__grid">
       <div class="hero__content">
@@ -72,10 +72,10 @@
           </ul>
           <a class="btn btn--wa btn--block" href="{{ $bookExam }}" target="_blank" rel="noopener">Book your free eye exam <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
-        <div class="bigcard__media"><img src="{{ asset('assets/images/photo-10.jpg') }}" alt="Customer trying on frames at Star Optical" loading="lazy" /></div>
+        <div class="bigcard__media"><img src="{{ asset('assets/images/photo-10.webp') }}" alt="Man trying on clubmaster frames during a free eye exam at Star Optical, Cunupia" width="1400" height="933" loading="lazy" /></div>
       </div>
       <div class="bigcard bigcard--reverse">
-        <div class="bigcard__media"><img src="{{ asset('assets/images/photo-05.jpg') }}" alt="Customer wearing Star Optical frames" loading="lazy" /></div>
+        <div class="bigcard__media"><img src="{{ asset('assets/images/photo-05-800.webp') }}" alt="Woman adjusting her new prescription eyeglasses from Star Optical, Trinidad" width="800" height="1200" loading="lazy" /></div>
         <div class="bigcard__text">
           <h3>Eyewear that matches your style</h3>
           <ul class="dots">
@@ -124,7 +124,7 @@
         @foreach($products as [$cat, $img, $name, $desc])
         <article class="product" data-cat="{{ $cat }}">
           @if($img)
-          <div class="product__img"><img src="{{ asset('assets/images/'.$img) }}" alt="{{ $name }}" loading="lazy" /></div>
+          <div class="product__img"><img src="{{ asset('assets/images/'.str_replace('.jpg', '-800.webp', $img)) }}" alt="{{ $name }} {{ $cat === 'kids' ? 'kids eyeglass frames' : ($cat === 'sunglasses' ? 'sunglasses' : 'eyeglass frames') }} at Star Optical, Trinidad" width="800" height="{{ in_array($img, ['photo-07.jpg','photo-13.jpg','photo-16.jpg','photo-17.jpg','photo-15.jpg']) ? 533 : 1200 }}" loading="lazy" /></div>
           @else
           <div class="product__img product__img--placeholder">
             <svg viewBox="0 0 120 60" class="sun-icon" aria-hidden="true"><path d="M4 22h112M14 22c-2 16 4 28 18 28s22-10 22-28M66 22c0 18 8 28 22 28s20-12 18-28M54 22c3-4 9-4 12 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -158,14 +158,14 @@
         <div class="carousel__track" id="promoTrack">
           @foreach($promotions as $promo)
           <article class="poster poster--{{ $promo->theme }}">
-            <img class="poster__img" src="{{ $promo->image_url ?? asset('assets/images/photo-'.str_pad((($loop->index % 6) * 3 + 1), 2, '0', STR_PAD_LEFT).'.jpg') }}" alt="" loading="lazy" />
+            <img class="poster__img" src="{{ $promo->image_url ?? asset('assets/images/photo-'.str_pad((($loop->index % 6) * 3 + 1), 2, '0', STR_PAD_LEFT).'-800.webp') }}" alt="{{ $promo->title }} promotion at Star Optical, Cunupia" width="800" height="1000" loading="lazy" />
             <div class="poster__body">
               @if($promo->kicker)<span class="poster__kicker">{{ $promo->kicker }}</span>@endif
               <h3>{{ $promo->title }}</h3>
               @if($promo->body)<p>{{ $promo->body }}</p>@endif
               <a class="btn btn--gold btn--sm" href="{{ $wa($promo->whatsappMessage()) }}" target="_blank" rel="noopener">{{ $promo->cta_text }}</a>
             </div>
-            <img class="poster__logo" src="{{ asset('assets/images/logo.png') }}" alt="" />
+            <img class="poster__logo" src="{{ asset('assets/images/logo-400.png') }}" alt="Star Optical logo" width="400" height="170" loading="lazy" />
           </article>
           @endforeach
         </div>
@@ -183,7 +183,7 @@
   {{-- ===== About / why us ===== --}}
   <section class="section" id="about">
     <div class="container split split--reverse">
-      <div class="split__media"><img class="rounded" src="{{ asset('assets/images/photo-06.jpg') }}" alt="Two customers wearing Star Optical frames" loading="lazy" /></div>
+      <div class="split__media"><img class="rounded" src="{{ asset('assets/images/photo-06-800.webp') }}" alt="Two customers wearing designer eyeglass frames from Star Optical, Cunupia" width="800" height="1200" loading="lazy" /></div>
       <div class="split__text">
         <span class="eyebrow">About {{ $settings['business_name'] }}</span>
         <h2>Affordable eyewear, <span class="txt-blue">quality eye care</span></h2>
@@ -265,12 +265,12 @@
     </div>
   </section>
   <x-slot name="structuredData">
-    <script type="application/ld+json" nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">{!! json_encode(['@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => array_map(fn ($qa) => ['@type' => 'Question', 'name' => $qa[0], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $qa[1]]], $faqs)], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json" nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">{!! json_encode(['@'.'context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => array_map(fn ($qa) => ['@type' => 'Question', 'name' => $qa[0], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $qa[1]]], $faqs)], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
   </x-slot>
 
   {{-- ===== CTA band ===== --}}
   <section class="cta-band">
-    <img class="cta-band__bg" src="{{ asset('assets/images/photo-14.jpg') }}" alt="" loading="lazy" />
+    <img class="cta-band__bg" src="{{ asset('assets/images/photo-14.webp') }}" alt="Close-up of a customer wearing prescription glasses from Star Optical" width="933" height="1400" loading="lazy" />
     <div class="container cta-band__content">
       <h2>Don't wait any longer.<br />Book your free eye exam today.</h2>
       <a class="btn btn--wa btn--lg" href="{{ $bookExam }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Book now on WhatsApp</a>
@@ -287,7 +287,7 @@
           <iframe title="{{ $settings['business_name'] }} location map" src="https://www.google.com/maps?q={{ urlencode($settings['address']) }}&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
         <div class="location__card">
-          <img src="{{ asset('assets/images/logo.png') }}" alt="" class="location__logo" />
+          <img src="{{ asset('assets/images/logo-400.png') }}" alt="Star Optical logo" class="location__logo" width="400" height="170" loading="lazy" />
           <h3>{{ $settings['business_name'] }}</h3>
           <address>{{ $settings['address'] }}<br /><a href="tel:{{ preg_replace('/\D+/', '', $settings['phone']) }}">{{ $settings['phone'] }}</a></address>
           <dl class="hours">

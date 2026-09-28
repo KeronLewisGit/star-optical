@@ -33,8 +33,8 @@ class Setting extends Model
         'gtm_container_id' => '',
         'google_site_verification' => '',
         'require_two_factor' => '0',
-        'seo_title' => 'Optician in Cunupia, Trinidad | Eyeglasses, Sunglasses & Free Eye Exams | Star Optical',
-        'seo_description' => 'Star Optical is an affordable optician in Cunupia, Trinidad and Tobago. Free eye examinations, prescription eyeglasses, frames for men, women and children, and polarised sunglasses. Book on WhatsApp today.',
+        'seo_title' => 'Optician in Cunupia, Trinidad | Free Eye Exams | Star Optical',
+        'seo_description' => 'Free eye exams, prescription eyeglasses and polarised sunglasses in Cunupia, Trinidad. Affordable optician near Chaguanas. Book on WhatsApp.',
     ];
 
     protected static function booted(): void

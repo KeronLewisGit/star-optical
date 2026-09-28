@@ -13,14 +13,16 @@
     $seoTitle = $title ?? $settings['seo_title'];
     $seoDescription = $metaDescription ?? $settings['seo_description'];
     $canonical = $canonical ?? url()->current();
-    $ogImage = asset('assets/images/photo-07.jpg');
+    $ogImage = asset('assets/images/photo-07.webp');
     $phoneDigits = preg_replace('/\D+/', '', $settings['phone']);
     $phoneE164 = '+'.(strlen($phoneDigits) === 7 ? '1868'.$phoneDigits : (strlen($phoneDigits) === 10 ? '1'.$phoneDigits : $phoneDigits));
   @endphp
   <title>{{ $seoTitle }}</title>
   <meta name="description" content="{{ $seoDescription }}" />
   <link rel="canonical" href="{{ $canonical }}" />
-  <meta name="robots" content="{{ $robots ?? 'index, follow, max-image-preview:large' }}" />
+  @isset($robots)<meta name="robots" content="{{ $robots }}" />@endisset
+  <link rel="alternate" hreflang="en-tt" href="{{ $canonical }}" />
+  <link rel="alternate" hreflang="x-default" href="{{ $canonical }}" />
   <meta name="geo.region" content="TT" />
   <meta name="geo.placename" content="Cunupia, Trinidad and Tobago" />
   {{-- Open Graph / social sharing --}}
@@ -38,7 +40,7 @@
   {{-- Structured data: local business (Optician) for Google Maps and rich results --}}
   <script type="application/ld+json" nonce="{{ $nonce }}">
   {!! json_encode([
-    '@context' => 'https://schema.org',
+    '@'.'context' => 'https://schema.org',
     '@type' => 'Optician',
     '@id' => url('/').'#business',
     'name' => $settings['business_name'],
@@ -79,8 +81,8 @@
   @if($settings['google_site_verification'] ?? false)
   <meta name="google-site-verification" content="{{ $settings['google_site_verification'] }}" />
   @endif
-  <link rel="icon" href="{{ asset('assets/images/logo.png') }}" type="image/png" />
-  @if(request()->routeIs('home'))<link rel="preload" as="image" href="{{ asset('assets/images/photo-07.jpg') }}" fetchpriority="high" />@endif
+  <link rel="icon" href="{{ asset('assets/images/logo-400.png') }}" type="image/png" />
+  @if(request()->routeIs('home'))<link rel="preload" as="image" href="{{ asset('assets/images/photo-07.webp') }}" fetchpriority="high" />@endif
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -113,7 +115,7 @@
   {{-- ===== Top bar ===== --}}
   <div class="topbar">
     <div class="container topbar__inner">
-      <a class="topbar__item" href="{{ route('home') }}#location">
+      <a class="topbar__item" href="{{ url('/') }}/#location">
         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
         {{ $settings['address'] }}
       </a>
@@ -128,15 +130,15 @@
   <header class="header" id="header">
     <div class="container header__inner">
       <a href="{{ route('home') }}" class="logo" aria-label="{{ $settings['business_name'] }} home">
-        <img src="{{ asset('assets/images/logo.png') }}" alt="{{ $settings['business_name'] }}" />
+        <img src="{{ asset('assets/images/logo-400.png') }}" alt="{{ $settings['business_name'] }} logo" width="400" height="170" />
       </a>
       <nav class="nav" id="nav" aria-label="Main navigation">
-        <a href="{{ route('home') }}#frames">Frames &amp; Sunglasses</a>
-        <a href="{{ route('home') }}#eye-exams">Free Eye Exams</a>
-        <a href="{{ route('home') }}#promotions">Promotions</a>
-        <a href="{{ route('home') }}#about">About</a>
-        <a href="{{ route('home') }}#location">Location</a>
-        <a href="{{ route('home') }}#contact">Contact</a>
+        <a href="{{ url('/') }}/#frames">Frames &amp; Sunglasses</a>
+        <a href="{{ url('/') }}/#eye-exams">Free Eye Exams</a>
+        <a href="{{ url('/') }}/#promotions">Promotions</a>
+        <a href="{{ url('/') }}/#about">About</a>
+        <a href="{{ url('/') }}/#location">Location</a>
+        <a href="{{ url('/') }}/#contact">Contact</a>
         <a class="btn btn--wa btn--sm nav__cta" href="{{ \App\Models\Setting::whatsappLink("Hi Star Optical! I'd like to book an appointment.") }}" target="_blank" rel="noopener">
           <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Book on WhatsApp
         </a>
@@ -155,7 +157,7 @@
   <footer class="footer">
     <div class="container footer__grid">
       <div class="footer__brand">
-        <img src="{{ asset('assets/images/logo.png') }}" alt="{{ $settings['business_name'] }}" />
+        <img src="{{ asset('assets/images/logo-400.png') }}" alt="{{ $settings['business_name'] }} logo" width="400" height="170" loading="lazy" />
         <p><strong>{{ $settings['tagline'] }}</strong><br />{{ $settings['business_name'] }}, serving Cunupia and all of Trinidad &amp; Tobago.</p>
       </div>
       <div>
@@ -164,10 +166,10 @@
           <li><a href="{{ route('page.eye-exams') }}">Free Eye Exams in Cunupia</a></li>
           <li><a href="{{ route('page.eyeglasses') }}">Eyeglasses &amp; Frames in Trinidad</a></li>
           <li><a href="{{ route('page.sunglasses') }}">Prescription &amp; Polarised Sunglasses</a></li>
-          <li><a href="{{ route('home') }}#frames">Frames &amp; Sunglasses</a></li>
-          <li><a href="{{ route('home') }}#eye-exams">Free Eye Exams</a></li>
-          <li><a href="{{ route('home') }}#promotions">Promotions</a></li>
-          <li><a href="{{ route('home') }}#about">About</a></li>
+          <li><a href="{{ url('/') }}/#frames">Frames &amp; Sunglasses</a></li>
+          <li><a href="{{ url('/') }}/#eye-exams">Free Eye Exams</a></li>
+          <li><a href="{{ url('/') }}/#promotions">Promotions</a></li>
+          <li><a href="{{ url('/') }}/#about">About</a></li>
         </ul>
       </div>
       <div>

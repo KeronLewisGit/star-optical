@@ -18,8 +18,8 @@ class PageController extends Controller
         return [
             'eye-exams' => [
                 'route' => 'page.eye-exams',
-                'title' => 'Free Eye Exam in Cunupia, Trinidad | Eye Test Near Chaguanas | Star Optical',
-                'description' => 'Book a free eye examination at Star Optical, #267 Southern Main Road, Cunupia. Comprehensive eye tests for adults, seniors and children in Trinidad, no purchase required. Book on WhatsApp.',
+                'title' => 'Free Eye Exam in Cunupia, Trinidad | Star Optical',
+                'description' => 'Book a free eye examination in Cunupia, near Chaguanas. Eye tests for adults, seniors and children, no purchase required. Book on WhatsApp.',
                 'h1' => 'Free Eye Exam in Cunupia, Trinidad',
                 'lead' => 'Looking for an eye test near Chaguanas, Cunupia or Caroni? Star Optical offers comprehensive eye examinations at no cost, with friendly staff who take the time to explain your results.',
                 'image' => 'photo-10.jpg',
@@ -40,8 +40,8 @@ class PageController extends Controller
             ],
             'eyeglasses' => [
                 'route' => 'page.eyeglasses',
-                'title' => 'Eyeglasses & Frames in Trinidad | Affordable Prescription Glasses | Star Optical Cunupia',
-                'description' => 'Affordable prescription eyeglasses and stylish frames for men, women and children in Trinidad. Visit Star Optical in Cunupia for designer and budget frames with lenses made to your prescription.',
+                'title' => 'Eyeglasses & Frames in Trinidad | Star Optical Cunupia',
+                'description' => 'Affordable prescription eyeglasses and stylish frames for men, women and children in Trinidad. Designer and budget frames in Cunupia.',
                 'h1' => 'Affordable Eyeglasses & Frames in Trinidad',
                 'lead' => 'From everyday prescription glasses to designer frames, Star Optical in Cunupia stocks hundreds of styles at prices that suit every budget, with lenses made to your prescription.',
                 'image' => 'photo-05.jpg',
@@ -62,8 +62,8 @@ class PageController extends Controller
             ],
             'sunglasses' => [
                 'route' => 'page.sunglasses',
-                'title' => 'Sunglasses in Trinidad | Prescription & Polarised Sunglasses | Star Optical Cunupia',
-                'description' => 'Prescription sunglasses and polarised sunglasses in Trinidad with UV400 protection. Visit Star Optical in Cunupia for sunglasses made to your prescription, ideal for driving and the beach.',
+                'title' => 'Prescription & Polarised Sunglasses in Trinidad | Star Optical',
+                'description' => 'Prescription and polarised sunglasses with UV400 protection in Cunupia, Trinidad. Made to your script, ideal for driving and the beach.',
                 'h1' => 'Prescription & Polarised Sunglasses in Trinidad',
                 'lead' => 'Protect your eyes from the Caribbean sun without giving up clear vision. Star Optical in Cunupia fits sunglasses to your prescription and stocks polarised lenses that cut glare on the road and at the beach.',
                 'image' => 'photo-17.jpg',
@@ -95,6 +95,23 @@ class PageController extends Controller
             'promotions' => Promotion::live()->limit(3)->get(),
             'related' => collect(self::pages())->except($slug),
         ]);
+    }
+
+    /** robots.txt is generated so the Sitemap line always carries the absolute live URL. */
+    public function robots(): Response
+    {
+        $lines = [
+            'User-agent: *',
+            'Disallow: /admin',
+            'Disallow: /login',
+            'Disallow: /two-factor',
+            'Disallow: /thank-you/',
+            'Allow: /',
+            '',
+            'Sitemap: '.route('sitemap'),
+        ];
+
+        return response(implode("\n", $lines)."\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }
 
     public function sitemap(): Response
