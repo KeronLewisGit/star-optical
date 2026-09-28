@@ -14,6 +14,11 @@ class Setting extends Model
 
     public const CACHE_KEY = 'settings.all';
 
+    /** Google shows roughly 60 title and 135-155 description characters before truncating. */
+    public const SEO_TITLE_MAX = 60;
+
+    public const SEO_DESCRIPTION_MAX = 135;
+
     /** Default values used until an administrator saves their own. */
     public const DEFAULTS = [
         'business_name' => 'Star Optical Company Ltd.',
@@ -33,8 +38,8 @@ class Setting extends Model
         'gtm_container_id' => '',
         'google_site_verification' => '',
         'require_two_factor' => '0',
-        'seo_title' => 'Optician in Cunupia, Trinidad | Free Eye Exams | Star Optical',
-        'seo_description' => 'Free eye exams, prescription eyeglasses and polarised sunglasses in Cunupia, Trinidad. Affordable optician near Chaguanas. Book on WhatsApp.',
+        'seo_title' => 'Cunupia, Trinidad Optician | Free Eye Exams | Star Optical',
+        'seo_description' => 'Free eye exams, prescription glasses and sunglasses in Cunupia, Trinidad. Affordable optician near Chaguanas. Book on WhatsApp.',
     ];
 
     protected static function booted(): void

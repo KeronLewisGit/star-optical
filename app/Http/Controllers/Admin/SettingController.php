@@ -36,8 +36,8 @@ class SettingController extends Controller
             'gtm_container_id' => ['nullable', 'string', 'regex:/^GTM-[A-Z0-9]{4,12}$/'],
             'google_site_verification' => ['nullable', 'string', 'regex:/^[A-Za-z0-9_\-]{10,100}$/'],
             'require_two_factor' => ['nullable', 'boolean'],
-            'seo_title' => ['required', 'string', 'max:70'],
-            'seo_description' => ['required', 'string', 'max:170'],
+            'seo_title' => ['required', 'string', 'max:'.Setting::SEO_TITLE_MAX],
+            'seo_description' => ['required', 'string', 'max:'.Setting::SEO_DESCRIPTION_MAX],
         ], [
             'ga_measurement_id.regex' => 'The GA4 Measurement ID looks like G-XXXXXXXXXX.',
             'gtm_container_id.regex' => 'The Tag Manager container ID looks like GTM-XXXXXXX.',
