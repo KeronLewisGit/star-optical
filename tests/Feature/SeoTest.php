@@ -19,6 +19,7 @@ class SeoTest extends TestCase
             ->assertDontSee('__contextArgs')
             ->assertDontSee('<meta name="robots"', false)
             ->assertSee('<link rel="canonical" href="', false)
+            ->assertSee('<link rel="sitemap" type="application/xml" title="Sitemap" href="'.route('sitemap').'"', false)
             ->assertSee('property="og:title"', false)
             ->assertSee('"@type":"Optician"', false)
             ->assertSee('"@type":"FAQPage"', false)
@@ -51,6 +52,7 @@ class SeoTest extends TestCase
 
     public function test_sitemap_lists_public_pages_only(): void
     {
+        $this->get('/robots.txt')->assertOk()->assertSee('Sitemap: '.route('sitemap'), false)->assertDontSee('Disallow: /'.PHP_EOL, false);
         $this->get('/sitemap.xml')->assertOk()
             ->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
             ->assertSee('<loc>'.route('home').'</loc>', false)

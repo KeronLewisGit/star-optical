@@ -22,6 +22,7 @@
   <title>{{ $seoTitle }}</title>
   <meta name="description" content="{{ $seoDescription }}" />
   <link rel="canonical" href="{{ $canonical }}" />
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ route('sitemap') }}" />
   @isset($robots)<meta name="robots" content="{{ $robots }}" />@endisset
   <link rel="alternate" hreflang="en-tt" href="{{ $canonical }}" />
   <link rel="alternate" hreflang="x-default" href="{{ $canonical }}" />
