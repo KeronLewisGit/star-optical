@@ -37,8 +37,8 @@
 
             <div class="card"><div class="card-body space-y-4">
                 <h2 class="card-title"><i class="fa-solid fa-magnifying-glass text-gold"></i> Search engine (SEO)</h2>
-                <x-form.input name="seo_title" label="Home page title" :value="$settings['seo_title']" required maxlength="70" help="The blue link text in Google results. Under 70 characters; lead with what people search for (optician, eyeglasses, Cunupia, Trinidad)." />
-                <x-form.textarea name="seo_description" label="Home page description" :value="$settings['seo_description']" rows="3" required maxlength="170" help="The grey text under the link in Google. Under 160 characters; include location and services." />
+                <x-form.input name="seo_title" label="Home page title" :value="$settings['seo_title']" required :maxlength="\App\Models\Setting::SEO_TITLE_MAX" help="The blue link text in Google results. Maximum 60 characters or Google cuts it off; lead with what people search for (optician, eyeglasses, Cunupia, Trinidad)." />
+                <x-form.textarea name="seo_description" label="Home page description" :value="$settings['seo_description']" rows="3" required :maxlength="\App\Models\Setting::SEO_DESCRIPTION_MAX" help="The grey text under the link in Google. Maximum 135 characters; put the main service and location first." />
             </div></div>
 
             <div class="card"><div class="card-body space-y-4">

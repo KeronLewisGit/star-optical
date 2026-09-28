@@ -14,7 +14,7 @@ class SeoTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk()
-            ->assertSee('<title>Optician in Cunupia, Trinidad | Free Eye Exams | Star Optical</title>', false)
+            ->assertSee('<title>Cunupia, Trinidad Optician | Free Eye Exams | Star Optical</title>', false)
             ->assertSee('"@context":"https://schema.org"', false)
             ->assertDontSee('__contextArgs')
             ->assertDontSee('<meta name="robots"', false)
@@ -32,6 +32,17 @@ class SeoTest extends TestCase
             ->assertSee('Designed and Developed by')
             ->assertSee('https://linkedin.com/in/keronlewis', false)
             ->assertDontSee('Website mockup');
+    }
+
+    public function test_default_seo_copy_fits_google_snippet_limits(): void
+    {
+        $this->assertLessThanOrEqual(\App\Models\Setting::SEO_TITLE_MAX, strlen(\App\Models\Setting::DEFAULTS['seo_title']));
+        $this->assertLessThanOrEqual(\App\Models\Setting::SEO_DESCRIPTION_MAX, strlen(\App\Models\Setting::DEFAULTS['seo_description']));
+
+        // An over-long value saved earlier is replaced by the migration.
+        \App\Models\Setting::set('seo_description', str_repeat('Long description. ', 12));
+        (require database_path('migrations/2026_09_28_000001_shorten_seo_settings.php'))->up();
+        $this->assertSame(\App\Models\Setting::DEFAULTS['seo_description'], \App\Models\Setting::get('seo_description'));
     }
 
     public function test_landing_pages_render_with_unique_titles(): void
