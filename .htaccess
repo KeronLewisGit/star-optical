@@ -6,6 +6,19 @@
     # Block dotfiles and dot-directories (.env, .git) outright.
     RewriteRule (^|/)\.(?!well-known/) - [F,L]
 
+    # Canonical URLs: an external request for /public/... or /index.php
+    # is redirected to the clean URL so only one URL per page is indexable.
+    RewriteCond %{THE_REQUEST} \s/+public/([^\s?]*) [NC]
+    RewriteRule ^ /%1 [R=301,L,NE]
+    RewriteCond %{THE_REQUEST} \s/+index\.php(\?|\s) [NC]
+    RewriteRule ^ / [R=301,L]
+
+    # Drop trailing slashes here, before the internal rewrite into public/,
+    # so the redirect target never exposes the /public/ prefix.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [R=301,L]
+
     # Send all other requests into the Laravel public/ directory.
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]

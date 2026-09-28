@@ -18,7 +18,7 @@
         ],
     ];
 @endphp
-<x-public-layout :settings="$settings" :title="$page['title']" :meta-description="$page['description']">
+<x-public-layout :settings="$settings" :title="$page['title']" :meta-description="$page['description']" :og-image="asset('assets/images/'.$page['image'])">
   <x-slot name="structuredData">
     <script type="application/ld+json" nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">{!! json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     <script type="application/ld+json" nonce="{{ \Illuminate\Support\Facades\Vite::cspNonce() }}">{!! json_encode($breadcrumbSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
@@ -38,7 +38,7 @@
 
   <section class="section">
     <div class="container split">
-      <div class="split__media"><img class="rounded" src="{{ asset('assets/images/'.str_replace('.jpg', '.webp', $page['image'])) }}" alt="{{ $page['image_alt'] }}" width="1400" height="933" loading="eager" /></div>
+      <div class="split__media">@php [$imgW, $imgH] = getimagesize(public_path('assets/images/'.$page['image'])); @endphp<img class="rounded" src="{{ asset('assets/images/'.str_replace('.jpg', '.webp', $page['image'])) }}" alt="{{ $page['image_alt'] }}" width="{{ $imgW }}" height="{{ $imgH }}" loading="eager" fetchpriority="high" /></div>
       <div class="split__text">
         <span class="eyebrow">{{ $settings['business_name'] }}, Cunupia</span>
         <h2>{{ $page['sections'][0][0] }}</h2>

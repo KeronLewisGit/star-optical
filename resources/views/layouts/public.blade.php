@@ -13,7 +13,9 @@
     $seoTitle = $title ?? $settings['seo_title'];
     $seoDescription = $metaDescription ?? $settings['seo_description'];
     $canonical = $canonical ?? url()->current();
-    $ogImage = asset('assets/images/photo-07.webp');
+    // JPEG for social previews: WhatsApp and Facebook do not reliably render WebP.
+    $ogImage = $ogImage ?? asset('assets/images/photo-07.jpg');
+    $sameAs = array_values(array_filter([$settings['facebook_url'], $settings['instagram_url'], $settings['tiktok_url']]));
     $phoneDigits = preg_replace('/\D+/', '', $settings['phone']);
     $phoneE164 = '+'.(strlen($phoneDigits) === 7 ? '1868'.$phoneDigits : (strlen($phoneDigits) === 10 ? '1'.$phoneDigits : $phoneDigits));
   @endphp
@@ -68,20 +70,21 @@
       ['@type' => 'OpeningHoursSpecification', 'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '09:00', 'closes' => '17:00'],
       ['@type' => 'OpeningHoursSpecification', 'dayOfWeek' => ['Saturday'], 'opens' => '09:00', 'closes' => '14:00'],
     ],
-    'sameAs' => array_values(array_filter([$settings['facebook_url'], $settings['instagram_url'], $settings['tiktok_url']])),
     'makesOffer' => [
       ['@type' => 'Offer', 'itemOffered' => ['@type' => 'Service', 'name' => 'Free eye examination'], 'price' => '0', 'priceCurrency' => 'TTD'],
       ['@type' => 'Offer', 'itemOffered' => ['@type' => 'Product', 'name' => 'Prescription eyeglasses']],
       ['@type' => 'Offer', 'itemOffered' => ['@type' => 'Product', 'name' => 'Prescription and polarised sunglasses']],
     ],
     'contactPoint' => ['@type' => 'ContactPoint', 'contactType' => 'appointments', 'telephone' => '+'.\App\Models\Setting::whatsappNumber(), 'url' => \App\Models\Setting::whatsappLink(''), 'availableLanguage' => 'en'],
-  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+  ] + ($sameAs ? ['sameAs' => $sameAs] : []), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
   </script>
   {{ $structuredData ?? '' }}
   @if($settings['google_site_verification'] ?? false)
   <meta name="google-site-verification" content="{{ $settings['google_site_verification'] }}" />
   @endif
-  <link rel="icon" href="{{ asset('assets/images/logo-400.png') }}" type="image/png" />
+  <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48" />
+  <link rel="icon" href="{{ asset('assets/images/icon-192.png') }}" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="{{ asset('assets/images/icon-180.png') }}" sizes="180x180" />
   @if(request()->routeIs('home'))<link rel="preload" as="image" href="{{ asset('assets/images/photo-07.webp') }}" fetchpriority="high" />@endif
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
