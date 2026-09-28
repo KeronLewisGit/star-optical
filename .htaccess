@@ -1,0 +1,12 @@
+# Repo root lives in public_html on Hostinger. Route everything into public/
+# so app files (.env, .git, app/, storage/ ...) are never served directly.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block dotfiles and dot-directories (.env, .git) outright.
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+    # Send all other requests into the Laravel public/ directory.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
