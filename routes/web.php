@@ -31,6 +31,7 @@ Route::get('/free-eye-exam-cunupia-trinidad', [PageController::class, 'show'])->
 Route::get('/eyeglasses-frames-trinidad', [PageController::class, 'show'])->defaults('slug', 'eyeglasses')->name('page.eyeglasses');
 Route::get('/sunglasses-trinidad', [PageController::class, 'show'])->defaults('slug', 'sunglasses')->name('page.sunglasses');
 Route::get('/sitemap.xml', [PageController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [PageController::class, 'robots'])->name('robots');
 
 /*
 |--------------------------------------------------------------------------

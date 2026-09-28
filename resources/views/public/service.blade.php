@@ -2,7 +2,7 @@
     use App\Models\Setting;
     $wa = fn (string $msg) => Setting::whatsappLink($msg);
     $faqSchema = [
-        '@context' => 'https://schema.org',
+        '@'.'context' => 'https://schema.org',
         '@type' => 'FAQPage',
         'mainEntity' => array_map(fn ($qa) => [
             '@type' => 'Question', 'name' => $qa[0],
@@ -10,7 +10,7 @@
         ], $page['faq']),
     ];
     $breadcrumbSchema = [
-        '@context' => 'https://schema.org',
+        '@'.'context' => 'https://schema.org',
         '@type' => 'BreadcrumbList',
         'itemListElement' => [
             ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => route('home')],
@@ -38,7 +38,7 @@
 
   <section class="section">
     <div class="container split">
-      <div class="split__media"><img class="rounded" src="{{ asset('assets/images/'.$page['image']) }}" alt="{{ $page['image_alt'] }}" width="1400" height="933" loading="eager" /></div>
+      <div class="split__media"><img class="rounded" src="{{ asset('assets/images/'.str_replace('.jpg', '.webp', $page['image'])) }}" alt="{{ $page['image_alt'] }}" width="1400" height="933" loading="eager" /></div>
       <div class="split__text">
         <span class="eyebrow">{{ $settings['business_name'] }}, Cunupia</span>
         <h2>{{ $page['sections'][0][0] }}</h2>

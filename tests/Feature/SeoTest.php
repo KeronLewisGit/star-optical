@@ -14,7 +14,10 @@ class SeoTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk()
-            ->assertSee('<title>Optician in Cunupia, Trinidad | Eyeglasses, Sunglasses &amp; Free Eye Exams | Star Optical</title>', false)
+            ->assertSee('<title>Optician in Cunupia, Trinidad | Free Eye Exams | Star Optical</title>', false)
+            ->assertSee('"@context":"https://schema.org"', false)
+            ->assertDontSee('__contextArgs')
+            ->assertDontSee('<meta name="robots"', false)
             ->assertSee('<link rel="canonical" href="', false)
             ->assertSee('property="og:title"', false)
             ->assertSee('"@type":"Optician"', false)
@@ -48,9 +51,9 @@ class SeoTest extends TestCase
     public function test_thank_you_and_admin_pages_are_not_indexable(): void
     {
         $this->get('/login')->assertHeader('X-Robots-Tag', 'noindex, nofollow');
-        // robots.txt is a static file served by the web server, so read it from disk.
-        $robots = file_get_contents(public_path('robots.txt'));
-        $this->assertStringContainsString('Disallow: /admin', $robots);
-        $this->assertStringContainsString('Sitemap:', $robots);
+        $this->get('/robots.txt')->assertOk()
+            ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
+            ->assertSee('Disallow: /admin')
+            ->assertSee('Sitemap: '.route('sitemap'));
     }
 }
