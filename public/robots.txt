@@ -4,3 +4,5 @@ Disallow: /login
 Disallow: /two-factor
 Disallow: /thank-you/
 Allow: /
+
+Sitemap: /sitemap.xml

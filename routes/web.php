@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +25,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 Route::post('/book', [BookingController::class, 'store'])->middleware('throttle:booking')->name('booking.store');
 Route::get('/thank-you/{booking:reference}', [BookingController::class, 'thanks'])->name('booking.thanks');
+
+// SEO landing pages for the main search terms (see PageController for content)
+Route::get('/free-eye-exam-cunupia-trinidad', [PageController::class, 'show'])->defaults('slug', 'eye-exams')->name('page.eye-exams');
+Route::get('/eyeglasses-frames-trinidad', [PageController::class, 'show'])->defaults('slug', 'eyeglasses')->name('page.eyeglasses');
+Route::get('/sunglasses-trinidad', [PageController::class, 'show'])->defaults('slug', 'sunglasses')->name('page.sunglasses');
+Route::get('/sitemap.xml', [PageController::class, 'sitemap'])->name('sitemap');
 
 /*
 |--------------------------------------------------------------------------

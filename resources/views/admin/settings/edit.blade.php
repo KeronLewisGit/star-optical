@@ -36,6 +36,12 @@
             </div></div>
 
             <div class="card"><div class="card-body space-y-4">
+                <h2 class="card-title"><i class="fa-solid fa-magnifying-glass text-gold"></i> Search engine (SEO)</h2>
+                <x-form.input name="seo_title" label="Home page title" :value="$settings['seo_title']" required maxlength="70" help="The blue link text in Google results. Under 70 characters; lead with what people search for (optician, eyeglasses, Cunupia, Trinidad)." />
+                <x-form.textarea name="seo_description" label="Home page description" :value="$settings['seo_description']" rows="3" required maxlength="170" help="The grey text under the link in Google. Under 160 characters; include location and services." />
+            </div></div>
+
+            <div class="card"><div class="card-body space-y-4">
                 <h2 class="card-title"><i class="fa-solid fa-shield-halved text-gold"></i> Security policy</h2>
                 <label class="flex items-start gap-3 text-sm"><input type="hidden" name="require_two_factor" value="0"><input type="checkbox" name="require_two_factor" value="1" class="mt-0.5 rounded border-gray-300 text-brand" @checked(old('require_two_factor', $settings['require_two_factor']) === '1')><span><strong>Require two-factor authentication for all staff</strong><br><span class="text-gray-500">Staff without 2FA will be asked to set it up before they can use the admin.</span></span></label>
             </div></div>
