@@ -116,14 +116,15 @@ class PageController extends Controller
 
     public function sitemap(): Response
     {
-        $urls = [['loc' => route('home'), 'priority' => '1.0', 'changefreq' => 'weekly']];
+        $lastmod = fn (string $view) => date('Y-m-d', max(filemtime(resource_path("views/{$view}.blade.php")), filemtime(__FILE__)));
+        $urls = [['loc' => route('home'), 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => $lastmod('public/home')]];
         foreach (self::pages() as $page) {
-            $urls[] = ['loc' => route($page['route']), 'priority' => '0.8', 'changefreq' => 'monthly'];
+            $urls[] = ['loc' => route($page['route']), 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => $lastmod('public/service')];
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n".'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
         foreach ($urls as $u) {
-            $xml .= "  <url><loc>{$u['loc']}</loc><changefreq>{$u['changefreq']}</changefreq><priority>{$u['priority']}</priority></url>\n";
+            $xml .= "  <url><loc>{$u['loc']}</loc><lastmod>{$u['lastmod']}</lastmod><changefreq>{$u['changefreq']}</changefreq><priority>{$u['priority']}</priority></url>\n";
         }
         $xml .= '</urlset>';
 

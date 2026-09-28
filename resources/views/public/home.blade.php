@@ -97,7 +97,7 @@
         <h2>Eyeglass Frames &amp; Sunglasses in Trinidad</h2>
         <p>A hand-picked selection of prescription glasses, designer frames and polarised sunglasses for every face, style and budget. Visit us in Cunupia to try them on, or message us about any style you like. See our <a href="{{ route('page.eyeglasses') }}">eyeglasses</a> and <a href="{{ route('page.sunglasses') }}">sunglasses</a> pages for details.</p>
       </div>
-      <div class="filters" role="tablist" aria-label="Filter collection">
+      <div class="filters" role="group" aria-label="Filter collection">
         <button class="filter is-active" data-filter="all">All</button>
         <button class="filter" data-filter="frames">Frames</button>
         <button class="filter" data-filter="sunglasses">Sunglasses</button>
@@ -171,7 +171,7 @@
         </div>
         <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next promotion"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <div class="carousel__dots" id="promoDots" role="tablist" aria-label="Promotion slides"></div>
+      <div class="carousel__dots" id="promoDots" role="group" aria-label="Promotion slides"></div>
       <div class="promo-banner">
         <div><strong>Free eye examinations, all year round.</strong><span>Not a promotion. It's how we do business.</span></div>
         <a class="btn btn--wa btn--sm" href="{{ $bookExam }}" target="_blank" rel="noopener">Book now</a>

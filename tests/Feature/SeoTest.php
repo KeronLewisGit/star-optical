@@ -22,6 +22,11 @@ class SeoTest extends TestCase
             ->assertSee('property="og:title"', false)
             ->assertSee('"@type":"Optician"', false)
             ->assertSee('"@type":"FAQPage"', false)
+            ->assertDontSee('"sameAs":[]', false)
+            ->assertSee('<meta property="og:image" content="'.asset('assets/images/photo-07.jpg').'"', false)
+            ->assertSee('<link rel="icon" href="'.asset('favicon.ico').'"', false)
+            ->assertSee('<link rel="apple-touch-icon"', false)
+            ->assertDontSee('role="tablist"', false)
             ->assertSee('Cunupia, Trinidad')
             ->assertSee('Designed and Developed by')
             ->assertSee('https://linkedin.com/in/keronlewis', false)
@@ -35,7 +40,12 @@ class SeoTest extends TestCase
             ->assertSee('"@type":"BreadcrumbList"', false)
             ->assertSee('Is the eye exam really free in Trinidad?');
 
-        $this->get('/eyeglasses-frames-trinidad')->assertOk()->assertSee('Affordable Eyeglasses &amp; Frames in Trinidad', false);
+        // Landing pages use their own JPEG for social previews and declare true image dimensions.
+        $this->get('/eyeglasses-frames-trinidad')->assertOk()
+            ->assertSee('Affordable Eyeglasses &amp; Frames in Trinidad', false)
+            ->assertSee('og:image" content="'.asset('assets/images/photo-05.jpg').'"', false)
+            ->assertSee('src="'.asset('assets/images/photo-05.webp').'" alt="', false)
+            ->assertSee('width="933" height="1400"', false);
         $this->get('/sunglasses-trinidad')->assertOk()->assertSee('Polarised Sunglasses in Trinidad');
     }
 
@@ -46,6 +56,7 @@ class SeoTest extends TestCase
             ->assertSee('<loc>'.route('home').'</loc>', false)
             ->assertSee('/free-eye-exam-cunupia-trinidad', false)
             ->assertDontSee('/admin');
+        $this->assertMatchesRegularExpression('/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/', $this->get('/sitemap.xml')->getContent());
     }
 
     public function test_thank_you_and_admin_pages_are_not_indexable(): void
