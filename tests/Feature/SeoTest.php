@@ -23,7 +23,7 @@ class SeoTest extends TestCase
             ->assertSee('property="og:title"', false)
             ->assertSee('"@type":"Optician"', false)
             ->assertSee('"@type":"FAQPage"', false)
-            ->assertDontSee('"sameAs":[]', false)
+            ->assertSee('"sameAs":["https://www.facebook.com/staropticaltt/","https://www.instagram.com/staropticaltt/"]', false)
             ->assertSee('<meta property="og:image" content="'.asset('assets/images/photo-07.jpg').'"', false)
             ->assertSee('<link rel="icon" href="'.asset('favicon.ico').'"', false)
             ->assertSee('<link rel="apple-touch-icon"', false)
